@@ -2,6 +2,8 @@
 
 return [
 
+    'table' => 'dumps',
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -66,8 +68,9 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'database',
             'model' => App\User::class,
+            'table' =>  'dumps',
         ],
 
         // 'users' => [
