@@ -26,3 +26,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/product', 'ProductController@index')->name('product');
+
+Route::post('/product/{id}/bin', 'ProductController@bin')->name('bin.update');
+
+Route::delete('/product/{id}/destroy', 'ProductController@destroy')->name('bin.destroy');
