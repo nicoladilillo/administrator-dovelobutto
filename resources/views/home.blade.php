@@ -8,7 +8,8 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-                    <a href="/product">Handle New Product</a>
+                    <a href="{{ route('product') }}">Handle New Product</a><br>
+                    <a href="{{ route('product.all') }}">All Product</a>
                 </div>
             </div>
         </div>

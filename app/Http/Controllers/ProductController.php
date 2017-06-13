@@ -14,6 +14,10 @@ class ProductController extends Controller
      *
      * @return Response
      */
+     public function __construct()
+     {
+         $this->middleware('auth');
+     }
 
     public function index()
     {
@@ -66,6 +70,62 @@ class ProductController extends Controller
             ->where('id_product', $product)
             ->delete();
 
-      return redirect()->action('ProductController@index');
+      return redirect()->back();
     }
+
+    public function all()
+    {
+      // Get the currently authenticated user's ID...
+      $id = Auth::id();
+
+      $products = DB::table('agreements')
+              ->join('dumps', 'dumps.id', '=', 'agreements.id_dump')
+              ->join('products', 'products.ID', '=', 'agreements.id_product')
+              ->join('bins', 'bins.ID', '=', 'agreements.id_bin')
+              ->select('products.ID as id', 'products.name as name', 'bins.name as bin')
+              ->where('id_dump','=',$id)
+              ->where('id_status','=',1)
+              ->orderBy('products.name')
+              ->groupBy('products.ID')
+              ->groupBy('products.name')
+              ->groupBy('bins.name')
+              ->get();
+
+      $bins = DB::table('bins')->get();
+
+      return view('all', [
+        'products' => $products,
+        'bins' => $bins
+      ]);
+    }
+
+    public function create(Request $request)
+     {
+       $bin = $request->input('bin');
+       $new = strtolower($request->input('new'));
+       // Get the currently authenticated user's ID...
+       $id = Auth::id();
+
+       $product = DB::table('products')
+              ->where('name','=',$new)
+              ->pluck('ID');
+
+      if ( empty($product) ) {
+        $product = DB::table('products')->insertGetId(
+          ['name' => $new]
+        );
+      }
+
+      DB::table('agreements')->insert(
+        [
+          'id_product' => $product[0],
+          'id_status' => 1,
+          'id_dump' => $id,
+          'id_bin' => $bin
+        ]
+      );
+
+      return redirect()->action('ProductController@all');
+     }
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 /*
+
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -32,3 +33,7 @@ Route::get('/product', 'ProductController@index')->name('product');
 Route::post('/product/{id}/bin', 'ProductController@bin')->name('bin.update');
 
 Route::delete('/product/{id}/destroy', 'ProductController@destroy')->name('bin.destroy');
+
+Route::get('/product/all', 'ProductController@all')->name('product.all');
+
+Route::post('/product/create', 'ProductController@create')->name('product.create');

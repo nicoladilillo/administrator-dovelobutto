@@ -16,11 +16,7 @@
                       <div class="form-group">
                         <label class="col-sm-2 control-label">{{ $product->name }}</label>
                         <div class="col-sm-10">
-                          <select class="form-control m-bot15" name="bin">
-                              @foreach($bins as $bin)
-                                <option value="{{ $bin->ID }}" >{{ $bin->name }}</option>
-                              @endforeach
-                          </select>
+                          @include('bin', $bins)
                         </div>
                       </div>
                     {{ Form::submit('Click Me!') }}
