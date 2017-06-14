@@ -9,7 +9,8 @@
 
                 <div class="panel-body">
                     <a href="{{ route('product') }}">Handle New Product</a><br>
-                    <a href="{{ route('product.all') }}">All Product</a>
+                    <a href="{{ route('product.all') }}">All Product</a><br>
+                    <a href="{{ route('city') }}">All City</a>
                 </div>
             </div>
         </div>

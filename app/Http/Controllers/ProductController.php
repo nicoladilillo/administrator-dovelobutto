@@ -35,12 +35,7 @@ class ProductController extends Controller
               ->groupBy('products.name')
               ->get();
 
-      $bins = DB::table('bins')->get();
-
-      return view('product', [
-        'products' => $products,
-        'bins' => $bins
-      ]);
+      return view('product', ['products' => $products]);
     }
 
     public function bin(Request $request, $product)
@@ -91,34 +86,47 @@ class ProductController extends Controller
               ->groupBy('bins.name')
               ->get();
 
-      $bins = DB::table('bins')->get();
-
-      return view('all', [
-        'products' => $products,
-        'bins' => $bins
-      ]);
+      return view('all', ['products' => $products,]);
     }
 
     public function create(Request $request)
-     {
+    {
        $bin = $request->input('bin');
        $new = strtolower($request->input('new'));
        // Get the currently authenticated user's ID...
        $id = Auth::id();
 
-       $product = DB::table('products')
+       $validate = DB::table('products')
               ->where('name','=',$new)
-              ->pluck('ID');
+              ->count();
 
-      if ( empty($product) ) {
+      if ( $validate == 0 ) {
         $product = DB::table('products')->insertGetId(
           ['name' => $new]
         );
       }
+      else  {
+        $product = DB::table('products')
+                  ->where('name','=',$new)
+                  ->pluck('ID');
+
+        $product = $product[0];
+
+        //You can't put a products in two differt bins
+        $validate = DB::table('agreements')
+                    ->where('id_product','=',$product)
+                    ->where('id_status','=',1)
+                    ->where('id_dump','=',$id)
+                    ->count();
+
+        if ( $validate != 0 ) {
+          return redirect()->back()->withErrors(['Product alredy exist! Try to delete it before and then change the bin']);
+        }
+      }
 
       DB::table('agreements')->insert(
         [
-          'id_product' => $product[0],
+          'id_product' => $product,
           'id_status' => 1,
           'id_dump' => $id,
           'id_bin' => $bin

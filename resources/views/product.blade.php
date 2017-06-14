@@ -9,6 +9,8 @@
 
                 <div class="panel-body">
 
+                  @include('error')
+
                   @foreach ($products as $product)
 
                     <form class="form-vertical" role="form" method="post" action="{{ route('bin.update', $product->id) }}">
@@ -16,7 +18,7 @@
                       <div class="form-group">
                         <label class="col-sm-2 control-label">{{ $product->name }}</label>
                         <div class="col-sm-10">
-                          @include('bin', $bins)
+                          @include('bin')
                         </div>
                       </div>
                     {{ Form::submit('Click Me!') }}

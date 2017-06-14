@@ -37,3 +37,7 @@ Route::delete('/product/{id}/destroy', 'ProductController@destroy')->name('bin.d
 Route::get('/product/all', 'ProductController@all')->name('product.all');
 
 Route::post('/product/create', 'ProductController@create')->name('product.create');
+
+Route::get('/cities', 'CityController@index')->name('city');
+Route::post('/cities/create', 'CityController@create')->name('city.create');
+Route::delete('/cities/{id}/delete', 'CityController@delete')->name('city.delete');

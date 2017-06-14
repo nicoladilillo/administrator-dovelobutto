@@ -9,9 +9,11 @@
 
                 <div class="panel-body">
 
+                  @include('error')
+
                   {{  Form::open([ 'method'  => 'post', 'route' => [ 'product.create' ] ])  }}
                     {{ Form::text('new') }}
-                    @include('bin', $bins)
+                    @include('bin')
                     {{ Form::submit('Add', ['class' => 'btn btn-primary']) }}
                   {{ Form::close() }}
 
