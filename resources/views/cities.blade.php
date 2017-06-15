@@ -22,6 +22,9 @@
                   </div>
 
                   <div class="row">
+                    @if( count($cities) == 0 )
+                      <p>...Add some cities</p>
+                    @endif
                   @foreach ($cities as $city)
                     <div class=".col-md-6">
                       {{  Form::open([ 'method'  => 'delete', 'route' => [ 'city.delete', $city->id ], 'class' => 'form-horizontal' ])  }}

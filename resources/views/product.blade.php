@@ -11,6 +11,9 @@
 
                   @include('error')
 
+                  @if( count($products) == 0 )
+                    <p>There are not product...</p>
+                  @endif
                   @foreach ($products as $product)
 
                     <form class="form-vertical" role="form" method="post" action="{{ route('bin.update', $product->id) }}">

@@ -17,6 +17,10 @@
                     {{ Form::submit('Add', ['class' => 'btn btn-primary']) }}
                   {{ Form::close() }}
 
+                  @if( count($products) == 0 )
+                  <p>There are not product...</p>
+                  @endif
+                  
                   @foreach ($products as $product)
 
                     {{ $product->name }}

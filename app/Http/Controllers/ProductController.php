@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Mailable;
+use App\Mail\SendMail;
 
 class ProductController extends Controller
 {
@@ -30,6 +33,7 @@ class ProductController extends Controller
               ->join('emails', 'emails.ID', '=', 'agreements.id_email')
               ->select('products.ID as id', 'products.name as name')
               ->where('id_dump','=',$id)
+              ->where('id_status','=',2)
               ->whereNull('id_bin')
               ->groupBy('products.ID')
               ->groupBy('products.name')
@@ -38,6 +42,7 @@ class ProductController extends Controller
       return view('product', ['products' => $products]);
     }
 
+    //Accept product
     public function bin(Request $request, $product)
     {
       $bin = $request->input('bin');
@@ -45,12 +50,34 @@ class ProductController extends Controller
       $dump = Auth::id();
 
       DB::table('agreements')
-            ->where('id_dump', $dump)
-            ->where('id_product', $product)
-            ->update([
-              'id_status' => 1,
-              'id_bin' => $bin
-            ]);
+          ->where('id_dump', $dump)
+          ->where('id_product', $product)
+          ->update([
+            'id_status' => 1,
+            'id_bin' => $bin
+          ]);
+
+      $user = DB::table('agreements')
+          ->join('emails','agreements.id_email','=','emails.ID')
+          ->join('dumps', 'dumps.id', '=', 'agreements.id_dump')
+          ->join('products', 'products.ID', '=', 'agreements.id_product')
+          ->join('bins','bins.ID','=','agreements.id_bin')
+          ->select('emails.email as user', 'dumps.name as dump', 'products.name as product', 'bins.name as bin')
+          ->where('id_dump', $dump)
+          ->where('id_product', $product)
+          ->get();
+
+      foreach ($user as $user) {
+        $data = [
+          'product' => $user->product,
+          'dump' => $user->dump,
+          'bin' => $user->bin
+        ];
+        Mail::send('emails.view', $data, function($message) use ($user)
+        {
+          $message->to($user->user)->subject('Abbiamo indirizzato il rifiuto da te segnalato');
+        });
+      }
 
       return redirect()->action('ProductController@index');
     }
@@ -63,7 +90,7 @@ class ProductController extends Controller
       DB::table('agreements')
             ->where('id_dump', $dump)
             ->where('id_product', $product)
-            ->delete();
+            ->update(['id_status' => 3]);
 
       return redirect()->back();
     }
