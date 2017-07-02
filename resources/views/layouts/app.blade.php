@@ -8,6 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="icon" href="{{ asset('recycle.png') }}">
     <title>{{ config('app.name', 'DoveLoButto') }}</title>
 
     <!-- Styles -->

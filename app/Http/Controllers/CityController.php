@@ -27,7 +27,10 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = City::orderBy('name')->get();
+        $dump = Auth::id();
+        $cities = City::orderBy('name')
+                  ->where('dump_id', $dump)
+                  ->get();
         return view('cities', ['cities' => $cities]);
     }
 

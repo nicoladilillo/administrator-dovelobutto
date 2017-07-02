@@ -86,7 +86,8 @@ class ProductController extends Controller
     {
       // Get the currently authenticated user's ID...
       $dump = Auth::id();
-      
+      echo "ciao";
+
       DB::table('agreements')
             ->where('id_dump', $dump)
             ->where('id_product', $product)
