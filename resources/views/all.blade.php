@@ -11,8 +11,8 @@
 
                   @include('error')
 
-                  {{  Form::open([ 'method'  => 'post', 'route' => [ 'product.create' ] ])  }}
-                    {{ Form::text('new') }}
+                  {{  Form::open([ 'method'  => 'post', 'route' => [ 'product.create' ], 'class' => 'form-inline' ])  }}
+                    {{ Form::text('new', null, array('class' => 'form-control')) }}
                     @include('bin')
                     {{ Form::submit('Add', ['class' => 'btn btn-primary']) }}
                   {{ Form::close() }}
@@ -20,7 +20,7 @@
                   @if( count($products) == 0 )
                   <p>There are not product...</p>
                   @endif
-                  
+
                   @foreach ($products as $product)
 
                     {{ $product->name }}
